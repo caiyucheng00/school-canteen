@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <script>
+        var xmlHttp = new XMLHttpRequest();
+
+        //GET
+        function sendAJAXGet(callback) {
+            xmlHttp.onreadystatechange = callback;
+            xmlHttp.open("GET", "/test/get?name=money");
+            xmlHttp.send();
+        }
+
+        function resAJAXGet() {
+            sendAJAXGet(function () {
+                if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
+                    var res = JSON.parse(xmlHttp.responseText);
+                    window.alert(res.data.name);
+                }
+            })
+        }
+
+        //POST
+        function sendAJAXPost(callback) {
+            xmlHttp.onreadystatechange = callback;
+            xmlHttp.open("POST", "/test/post");
+            xmlHttp.setRequestHeader("Content-type","application/json;charset=UTF-8");
+            xmlHttp.send(JSON.stringify({"name":"money","id":1}));
+        }
+
+        function resAJAXPost() {
+            sendAJAXPost(function () {
+                if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
+                    var res = JSON.parse(xmlHttp.responseText);
+                    window.alert(res.data);
+                }
+            })
+        }
+    </script>
+
+</head>
+<body>
+
+<div id="myDiv">
+    <h1>原生js与ajax</h1>
+</div>
+<button type="button" onclick="resAJAXGet()">发送AJAX GET</button>
+<br/>
+<button type="button" onclick="resAJAXPost()">发送AJAX POST</button>
+</body>
+</html>
