@@ -13,6 +13,8 @@ import com.cyc.schoolcanteen.service.SetmealService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
@@ -40,6 +42,7 @@ public class SetmealController {
      * @param setmealDto
      * @return
      */
+    @CacheEvict(value = "setmealCache",allEntries = true)
     @PostMapping
     public Result<String> save(@RequestBody SetmealDto setmealDto){
 
@@ -110,6 +113,7 @@ public class SetmealController {
      * @param idList
      * @return
      */
+    @CacheEvict(value = "setmealCache",allEntries = true)
     @DeleteMapping
     public Result<String> delete(@RequestParam("ids") List<Long> idList){
         setmealService.deleteByStatus(idList);
@@ -134,6 +138,7 @@ public class SetmealController {
      * @param setmealDto
      * @return
      */
+    @CacheEvict(value = "setmealCache",allEntries = true)
     @PutMapping
     public Result<String> update(@RequestBody SetmealDto setmealDto){
         setmealService.updateWithDish(setmealDto);
@@ -141,6 +146,7 @@ public class SetmealController {
     }
 
 
+    @Cacheable(value = "setmealCache", key = "#categoryId")
     @GetMapping("/list")
     public Result<List<Setmeal>> list(Long categoryId){
         List<Setmeal> setmealList = setmealService.list(new LambdaQueryWrapper<Setmeal>().eq(Setmeal::getCategoryId, categoryId));

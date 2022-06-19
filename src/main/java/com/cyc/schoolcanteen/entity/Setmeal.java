@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
  * 套餐
  */
 @Data
-public class Setmeal{
+public class Setmeal implements Serializable{
     private Long id;
     //分类id
     private Long categoryId;

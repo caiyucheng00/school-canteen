@@ -15,10 +15,14 @@ import com.cyc.schoolcanteen.service.DishService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
@@ -40,12 +44,16 @@ public class DishController {
     @Autowired
     private DishFlavorService flavorService;
 
+    @Autowired
+    private RedisTemplate<Object,Object> redisTemplate;
+
     /**
      * 菜品添加
      *
      * @param dishDTO
      * @return
      */
+    @CacheEvict(value = "dishCache", allEntries = true)
     @PostMapping
     public Result<String> save(@RequestBody DishDTO dishDTO) {
 
@@ -127,6 +135,7 @@ public class DishController {
      * @param dishDTO
      * @return
      */
+    @CacheEvict(value = "dishCache", allEntries = true)
     @PutMapping
     public Result<String> update(@RequestBody DishDTO dishDTO){
         dishService.updateWithFlavors(dishDTO);
@@ -139,6 +148,7 @@ public class DishController {
      * @param ids
      * @return
      */
+    @CacheEvict(value = "dishCache", allEntries = true)
     @DeleteMapping
     public Result<String> delete(String ids){
         String[] strs = ids.split(",");
@@ -182,6 +192,7 @@ public class DishController {
      * @param categoryId
      * @return
      */
+    @Cacheable(value = "dishCache", key = "#categoryId")
     @GetMapping("/list")
     public Result<List<DishDTO>> list(Long categoryId){
         List<Dish> dishList = dishService.list(new LambdaQueryWrapper<Dish>().eq(Dish::getCategoryId, categoryId));

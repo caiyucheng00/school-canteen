@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
@@ -11,7 +12,8 @@ import java.time.LocalDateTime;
  菜品
  */
 @Data
-public class Dish {
+public class Dish implements Serializable {
+    private static final long serialVersionUID = -1;
     private Long id;
     //菜品名称
     private String name;

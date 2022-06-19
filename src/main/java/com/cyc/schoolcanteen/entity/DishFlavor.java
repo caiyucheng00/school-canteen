@@ -4,13 +4,16 @@ import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
 菜品口味
  */
 @Data
-public class DishFlavor{
+public class DishFlavor implements Serializable {
+    private static final long serialVersionUID = -1;
+
     private Long id;
     //菜品id
     private Long dishId;

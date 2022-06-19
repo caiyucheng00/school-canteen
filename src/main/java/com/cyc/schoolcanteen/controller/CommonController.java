@@ -54,6 +54,9 @@ public class CommonController {
         FileInputStream fis = null;
         ServletOutputStream os = null;
         try {
+            if(fileName == null){
+                fileName = "noImg.png";
+            }
             fis = new FileInputStream(new File(basePath + fileName));
 
             response.setContentType("image/jpeg");
@@ -69,14 +72,16 @@ public class CommonController {
             e.printStackTrace();
         } finally {
             try {
-                assert fis != null;
-                fis.close();
+                if (fis != null) {
+                    fis.close();
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
             try {
-                assert os != null;
-                os.close();
+                if (os != null) {
+                    os.close();
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
